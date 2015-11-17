@@ -1,0 +1,4 @@
+Project for Michael and Damir. Week 3. (11/15/15)
+-Create program that goes through image files in a directory
+-Create text file that shows the name of the files sorted by either name or size
+-Optional: Create output folder that greyifies all the images in the folder
