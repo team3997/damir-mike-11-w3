@@ -7,31 +7,34 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <stdio.h>
+#include <stdlib.h>
+
 int main( int argc, const char* argv[] )
 {
 	int i = 0;
 	struct dirent *ep;
-	char *path;
-	char *fileArray;
-	path = (char *)argv[1];
-	
-    DIR *dir;
+	DIR *dir;
 
-    dir = opendir(path);
+	char *path;
+	path = (char *)argv[1];
+
+	FILE *textFile = fopen("listing.txt", "w");
 	
-    if(dir != NULL){
-		i = 0;
+
+
+	
+    	dir = opendir(path);
+    	if(dir != NULL){
 		while(ep = readdir(dir)){
-       		printf("%s\n", ep->d_name);
-			
-			fileArray[i] = ep->d_name;
-			i++;
+       			puts(ep->d_name);	
+			fprintf(textFile, "%s\n", ep->d_name);
 		}
-        closedir(dir);
-    }
-    else
-    { 
+        	(void) closedir(dir);
+		fclose(textFile);
+    	}
+    	else
+    	{ 
 		perror("Cannot open directory \n");
-    }
+    	}
 	return 0;
 }
