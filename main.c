@@ -53,55 +53,65 @@ int main( int argc, const char* argv[] )
 	FILE *textFile = fopen("aplha_listing.txt", "w");
 	FILE *sizeFile = fopen("size_listing.txt", "w");
 	
-	
+	// Define arrays that hold filename and filesize information
 	int **size = NULL;
 	char **items = NULL;
-	char **items2 = NULL;
 	
-    	dir = opendir(path);
+	// Open the directory from the input
+    dir = opendir(path);
 	
-	
+	//if directory is valid
     if(dir != NULL){
+	
 		while(ep = readdir(dir)){
 			if(strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0){
 				continue;
 			}
 			
+			// Concatenate file path for the file in the loop
 			strcpy(filePath, path);
 			strcat(filePath, "/");
 			strcat(filePath, ep->d_name);
 		
-			
+			//Get file size information by seeking to the end of the file and finding bit position
 			FILE *specificFile = fopen(filePath, "r");
 			fseek(specificFile, 0L, SEEK_END);
 			sz = ftell(specificFile);
 			fclose(specificFile);
 			
-			size = (int**) realloc(size, sizeof(int*) * (i+1));
-			size[i] = (int*) realloc(size[i], sz);
+			// allocate memory for the filesize array
+			size = (int**) realloc(size, sizeof(int*) * (i+1)); //allocate memory for entire array
+			size[i] = (int*) realloc(size[i], sz); // allocate memory for each int
 			
+			//set each value
 			size[i] = sz;
 		
 			
 			items = (char**) realloc(items, sizeof(char*) * (i+1)); //allocate memory for entire array
 			items[i] = (char*) realloc(items[i], strlen(ep->d_name)); // allocate memory for each string 
 			
+			// Copy the file name to the string array
 			strcpy(items[i], ep->d_name);
 			i++;
 		}
 		
+		// Sort the two arrays
 		qsort(items, i, (sizeof(items[0])), cmpchar);
 		qsort(size, i, (sizeof(size[0])), cmpint);
 
+		// Print the two sorted arrays to a text file.
 		for(n = 0; n < i; n++){
 			fprintf(textFile, "%s\n", items[n]);
 			fprintf(sizeFile, "%d\n", size[n]);
 		}
 		
+		// close the directory and files.
        	(void) closedir(dir);
 		fclose(textFile);
 		fclose(sizeFile);
-		printf("Output: size_listing.txt & alpha_listing.txt");
+		
+		//Print success!
+		printf("Output: size_listing.txt & alpha_listing.txt\n");
    	}
     else{ 
 	perror("Cannot open directory \n");
