@@ -5,6 +5,7 @@
  */
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,6 +37,7 @@ int main( int argc, const char* argv[] )
 	
 	// Define Directory
 	struct dirent *ep;
+	struct stat fileStat;
 	DIR *dir;
 	
 	char *filePath;
@@ -53,15 +55,17 @@ int main( int argc, const char* argv[] )
 	FILE *textFile = fopen("aplha_listing.txt", "w");
 	FILE *sizeFile = fopen("size_listing.txt", "w");
 	
+
 	// Define arrays that hold filename and filesize information
 	int **size = NULL;
 	char **items = NULL;
 	
 	// Open the directory from the input
-    dir = opendir(path);
+    	dir = opendir(path);
+
 	
 	//if directory is valid
-    if(dir != NULL){
+  	  if(dir != NULL){
 	
 		while(ep = readdir(dir)){
 			if(strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0){
@@ -73,11 +77,9 @@ int main( int argc, const char* argv[] )
 			strcat(filePath, "/");
 			strcat(filePath, ep->d_name);
 		
-			//Get file size information by seeking to the end of the file and finding bit position
-			FILE *specificFile = fopen(filePath, "r");
-			fseek(specificFile, 0L, SEEK_END);
-			sz = ftell(specificFile);
-			fclose(specificFile);
+			stat(filePath, &fileStat);
+			//printf("%d\n", fileStat.st_size);
+			sz = fileStat.st_size;
 			
 			// allocate memory for the filesize array
 			size = (int**) realloc(size, sizeof(int*) * (i+1)); //allocate memory for entire array
@@ -86,7 +88,6 @@ int main( int argc, const char* argv[] )
 			//set each value
 			size[i] = sz;
 		
-			
 			items = (char**) realloc(items, sizeof(char*) * (i+1)); //allocate memory for entire array
 			items[i] = (char*) realloc(items[i], strlen(ep->d_name)); // allocate memory for each string 
 			
