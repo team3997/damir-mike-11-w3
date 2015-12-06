@@ -1,0 +1,5 @@
+bunny.bmp
+firebird.bmp
+hand.bmp
+party.bmp
+taco.bmp

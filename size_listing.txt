@@ -1,0 +1,5 @@
+480122	bunny.bmp
+480122	firebird.bmp
+970254	hand.bmp
+2850054	party.bmp
+6912054	taco.bmp

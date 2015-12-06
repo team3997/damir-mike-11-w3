@@ -103,7 +103,7 @@ int main( int argc, const char* argv[] )
 		// Print the two sorted arrays to a text file.
 		for(n = 0; n < i; n++){
 			fprintf(textFile, "%s\n", items[n]);
-			fprintf(sizeFile, "%d\n", size[n]);
+			fprintf(sizeFile, "%d\t%s\n", size[n],items[n]);
 		}
 		
 		// close the directory and files.
